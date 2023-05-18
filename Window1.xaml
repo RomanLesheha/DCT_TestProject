@@ -74,6 +74,7 @@
         <RadioButton x:Name="checkbox1" Checked="CryptoCurrChecked" Content="Cryptocurrency" Foreground="#FFFFF5F5" Grid.Column="3" HorizontalAlignment="Left" Margin="137,84,0,0" VerticalAlignment="Top" Height="30" Width="142" FontSize="16" FontStyle="Normal" FontWeight="Bold"/>
         <RadioButton x:Name="checkbox2" Checked="CurrChecked" Content="Currency" IsChecked="True" Foreground="#FFFFF5F5" Grid.Column="6" HorizontalAlignment="Left" Margin="110,84,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="30" Width="142" FontSize="16" FontStyle="Normal" FontWeight="Bold"/>
         <RadioButton x:Name="checkbox1_Copy" Checked="CryptoToCurrChecked" Content="Cryptocurrency-&gt;Currency&#xD;&#xA;" Foreground="#FFFFF5F5" Grid.Column="3" HorizontalAlignment="Left" Margin="315,84,0,0" VerticalAlignment="Top" Height="30" Width="233" FontSize="16" FontStyle="Normal" FontWeight="Bold" RenderTransformOrigin="0.917,0.521" Grid.ColumnSpan="4"/>
+        <CheckBox Content="CheckBox" Grid.Column="6" HorizontalAlignment="Left" Margin="50,-89,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 
