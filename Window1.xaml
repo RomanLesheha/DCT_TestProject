@@ -1,0 +1,80 @@
+﻿<Window x:Class="DCT_TestProject.Window1"
+        ResizeMode="NoResize"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DCT_TestProject"
+        mc:Ignorable="d"
+        
+        Title="Window1" Height="450" Width="1005">
+
+    <Grid Margin="0,0,0,-28">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="21*"/>
+            <ColumnDefinition Width="72*"/>
+            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="76*"/>
+            <ColumnDefinition Width="46*"/>
+            <ColumnDefinition Width="183*"/>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="109*"/>
+        </Grid.ColumnDefinitions>
+        <Image HorizontalAlignment="Left" Height="230" Margin="82,111,0,0" VerticalAlignment="Top" Width="829" Source="Rectangle 20.png" Grid.ColumnSpan="7" Grid.Column="2"/>
+        <Image HorizontalAlignment="Left" Height="281" Margin="36,75,0,0" VerticalAlignment="Top" Width="867" Source="Vector 80.png" Grid.ColumnSpan="7" Grid.Column="2"/>
+
+        <StackPanel Grid.Row="0" Width="1000" Height="50" Orientation="Horizontal" Grid.ColumnSpan="9" Margin="-70,-4,-130,394">
+            <Label Content="Currency Converter" Width="1000" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                FontSize="45" Foreground="#9D97DD" FontWeight="Bold" Margin="0,10,0,-30"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Height="60" Width="800" Margin="82,89,0,0" Grid.ColumnSpan="7" Grid.Column="2">
+            <Label Height="40" Width="150" Margin="35,0,0,-10" VerticalAlignment="Bottom" Foreground="White" FontSize="20"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="190" Width="800" VerticalAlignment="Bottom" Margin="82,0,0,101" Grid.ColumnSpan="7" Grid.Column="2">
+            <TextBox x:Name="CountTxt" Width="200" Height="30" Margin="40,10,0,0"  FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" BorderBrush="White" Foreground="#FF9D97DD" Background="#FFEEEEF9" SelectionBrush="#FFEEEEF9"/>
+
+            <ComboBox x:Name="cmbFromCurrency" Width="170" Height="30" Margin="60,10,40,150" FontSize="16"  MaxDropDownHeight="150" BorderBrush="White"  Background="#FFEEEEF9" Foreground="#FF9C94DD"/>
+
+            <ComboBox x:Name="cmbToCurrency" Width="170" Height="30" Margin="40,10,0,0" FontSize="16" VerticalContentAlignment="Center" VerticalAlignment="Top" MaxDropDownHeight="150" Foreground="#FF9C94DD"/>
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="8" Margin="28,89,-235,101" Grid.Column="1">
+            <Label Content="Converterted Currency " Width="289" 
+                FontSize="26" Foreground="#EEEEF9" Margin="330,142,0,60" RenderTransformOrigin="0.518,0.5"  />
+        </StackPanel>
+
+        <Label x:Name="resultlbl"  Margin="267,272,180,111" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="-5.539,0.75" FontSize="22"  Foreground="#EEEEF9" Grid.ColumnSpan="4" Grid.Column="3"/>
+
+        <StackPanel Height="100" Orientation="Horizontal" Margin="22,261,-108,79" Grid.ColumnSpan="6" Grid.Column="3">
+            <Button x:Name="Convert" Height="40" Width="150" Content="Convert" Click="Convert_Click" Margin="0,12,400,48" Foreground="White" FontSize="20" Style="{StaticResource ButtonRound}">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#9D97DD" Offset="0.0"/>
+                        <GradientStop Color="#B7CEF0" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Clear" Height="40" Width="150" Content="Clear" Click="Clear_Click" Foreground="White" FontSize="20" Style="{StaticResource ButtonRound}" Margin="0,12,0,48">
+                <Button.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#9D97DD" Offset="0.0"/>
+                        <GradientStop Color="#B7CEF0" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+        <Label Content="Enter amount:
+               " Grid.Column="3" HorizontalAlignment="Left" Margin="33,119,0,0" VerticalAlignment="Top" Foreground="#FFFFF5F5" FontSize="20" Width="141"/>
+        <Label Content="From
+               " Grid.Column="3" HorizontalAlignment="Left" Margin="292,119,0,0" VerticalAlignment="Top" Foreground="#FFFFF5F5" FontSize="20" Width="79" Grid.ColumnSpan="2"/>
+        <Label Content="To
+               " Grid.Column="6" HorizontalAlignment="Left" Margin="86,119,0,0" VerticalAlignment="Top" Foreground="#FFFFF5F5" FontSize="20" Width="79"/>
+        <RadioButton x:Name="checkbox1" Checked="CryptoCurrChecked" Content="Cryptocurrency" Foreground="#FFFFF5F5" Grid.Column="3" HorizontalAlignment="Left" Margin="137,84,0,0" VerticalAlignment="Top" Height="30" Width="142" FontSize="16" FontStyle="Normal" FontWeight="Bold"/>
+        <RadioButton x:Name="checkbox2" Checked="CurrChecked" Content="Currency" IsChecked="True" Foreground="#FFFFF5F5" Grid.Column="6" HorizontalAlignment="Left" Margin="110,84,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="30" Width="142" FontSize="16" FontStyle="Normal" FontWeight="Bold"/>
+        <RadioButton x:Name="checkbox1_Copy" Checked="CryptoToCurrChecked" Content="Cryptocurrency-&gt;Currency&#xD;&#xA;" Foreground="#FFFFF5F5" Grid.Column="3" HorizontalAlignment="Left" Margin="315,84,0,0" VerticalAlignment="Top" Height="30" Width="233" FontSize="16" FontStyle="Normal" FontWeight="Bold" RenderTransformOrigin="0.917,0.521" Grid.ColumnSpan="4"/>
+
+    </Grid>
+
+</Window>
