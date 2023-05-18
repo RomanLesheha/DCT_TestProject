@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Rectangle 20.png" />
-    <Resource Include="Vector 80.png" />
+    <Resource Include="Pictures\Rectangle 20.png" />
+    <Resource Include="Pictures\Vector 80.png" />
   </ItemGroup>
 
 </Project>

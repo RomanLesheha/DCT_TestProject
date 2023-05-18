@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DCT_TestProject.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,7 +49,7 @@ namespace DCT_TestProject
             var json = await response.Content.ReadAsStringAsync();
             var json1 = await response1.Content.ReadAsStringAsync();
 
-            var data = JsonConvert.DeserializeObject<Asset>(json);
+            var data = JsonConvert.DeserializeObject<Assets>(json);
             foreach (var item in data.data)
             {
                 dtCurrency.Rows.Add(item.name, item.priceUsd);
@@ -58,7 +59,7 @@ namespace DCT_TestProject
             cmbFromCurrency.SelectedValuePath = "Value";
             cmbFromCurrency.SelectedIndex = 0;
 
-            var data1 = JsonConvert.DeserializeObject<CurrencyRate>(json1);
+            var data1 = JsonConvert.DeserializeObject<Rates>(json1);
             DataTable dtCurrency1 = new DataTable();
             dtCurrency1.Columns.Add("Text");
             dtCurrency1.Columns.Add("Value");
@@ -94,7 +95,7 @@ namespace DCT_TestProject
 
             if (CryptoCurrency)
             {
-                var data = JsonConvert.DeserializeObject<Asset>(json);
+                var data = JsonConvert.DeserializeObject<Assets>(json);
 
                 foreach (var item in data.data)
                 {
@@ -103,7 +104,7 @@ namespace DCT_TestProject
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<CurrencyRate>(json);
+                var data = JsonConvert.DeserializeObject<Rates>(json);
                 foreach (var item in data.data)
                 {
                     dtCurrency.Rows.Add(item.id, item.rateUsd);
@@ -155,20 +156,4 @@ namespace DCT_TestProject
 
         }
     }
-
-    public class CurrencyRate
-    {
-        public string id { get; set; }
-
-        public string symbol { get; set; }
-        public string currencySymbol { get; set; }
-
-        public string type { get; set; }
-
-        public decimal rateUsd { get; set; }
-
-        public CurrencyRate[] data;
-    }
-   
-
 }
