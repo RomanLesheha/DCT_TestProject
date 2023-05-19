@@ -20,9 +20,19 @@ namespace DCT_TestProject.Models
         public string changePercent24Hr { get; set; }
         public string vwap24Hr { get; set; }
 
+        public string explorer { get; set; }
+
+        public DateTimeOffset dateTimeOffset { get; set; }
         public Assets[] data { get; set; }
+
     }
 
+    class AssetsResponse
+    {
+        public Assets data { get; set; }
+        public long timestamp { get; set; }
+
+    }
     class SelectedAsset
     {
         public decimal priceUsd { get; set; }

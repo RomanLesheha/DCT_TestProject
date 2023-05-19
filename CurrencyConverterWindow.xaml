@@ -21,8 +21,8 @@
             <ColumnDefinition Width="35*"/>
             <ColumnDefinition Width="109*"/>
         </Grid.ColumnDefinitions>
-        <Image HorizontalAlignment="Left" Height="230" Margin="82,111,0,0" VerticalAlignment="Top" Width="829" Source="Rectangle 20.png" Grid.ColumnSpan="7" Grid.Column="2"/>
-        <Image HorizontalAlignment="Left" Height="281" Margin="36,75,0,0" VerticalAlignment="Top" Width="867" Source="Vector 80.png" Grid.ColumnSpan="7" Grid.Column="2"/>
+        <Image HorizontalAlignment="Left" Height="230" Margin="82,111,0,0" VerticalAlignment="Top" Width="829" Source="/Pictures/Rectangle 20.png" Grid.ColumnSpan="7" Grid.Column="2"/>
+        <Image HorizontalAlignment="Left" Height="281" Margin="36,75,0,0" VerticalAlignment="Top" Width="867" Source="/Pictures/Vector 80.png" Grid.ColumnSpan="7" Grid.Column="2"/>
 
         <StackPanel Grid.Row="0" Width="1000" Height="50" Orientation="Horizontal" Grid.ColumnSpan="9" Margin="-70,-4,-130,394">
             <Label Content="Currency Converter" Width="1000" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"

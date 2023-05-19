@@ -34,7 +34,7 @@ namespace DCT_TestProject
         public MainWindow()
         {
             InitializeComponent();
-            ParseTop15Currency();
+            ParseTopCurrency();
         }
         private void Chart1_Click(object sender, ChartPoint chartPoint)
         {
@@ -57,7 +57,7 @@ namespace DCT_TestProject
             window.Show();
         }
        
-        private async void ParseTop15Currency()
+        private async void ParseTopCurrency()
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri("http://api.coincap.io");
