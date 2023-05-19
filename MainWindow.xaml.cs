@@ -38,19 +38,28 @@ namespace DCT_TestProject
         }
         private void Chart1_Click(object sender, ChartPoint chartPoint)
         {
-            // Retrieve the index of the clicked data point
             var index = (int)chartPoint.X;
 
-            // Retrieve the corresponding name from the Labels array
             var clickedName = Labels[index];
-            // Display the name (you can use MessageBox or any other UI element)
 
             SelectedCurrencyInfoWindow window = new SelectedCurrencyInfoWindow();
    
             SelectedCurrencyInfoWindow.SelectedId = clickedName;
             window.Show();
         }
-       
+        private void datagrid1_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if (datagrid1.SelectedItem is DataRowView selectedRow)
+            {
+                string name = selectedRow["Id"].ToString();
+
+                SelectedCurrencyInfoWindow window = new SelectedCurrencyInfoWindow();
+
+                SelectedCurrencyInfoWindow.SelectedId = name;
+                window.Show();
+            }
+        }
+
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             Window1 window = new Window1();
@@ -66,8 +75,10 @@ namespace DCT_TestProject
             request = new HttpRequestMessage(HttpMethod.Get, "/v2/assets");
 
             DataTable dtCurrency = new DataTable();
+            dtCurrency.Columns.Add("Rank");
+            dtCurrency.Columns.Add("Id");
             dtCurrency.Columns.Add("Name");
-            dtCurrency.Columns.Add("Price (USD)");
+            dtCurrency.Columns.Add("Price");
 
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -75,24 +86,13 @@ namespace DCT_TestProject
 
            
             var data = JsonConvert.DeserializeObject<Assets>(json);
-            var sortedData = data.data.OrderByDescending(item => item.priceUsd).Take(10);
+            var sortedData = data.data.OrderByDescending(item => item.priceUsd);
             foreach (var item in sortedData)
             {
-                dtCurrency.Rows.Add(item.id, item.priceUsd);
+                dtCurrency.Rows.Add(item.rank,item.id,item.name, item.priceUsd.ToString("N8"));
             }
-            SeriesCollection = new SeriesCollection
-                {
-                    new ColumnSeries
-                    {
-                        Title = "Price (USD)",
-                        Values = new ChartValues<double>(dtCurrency.Rows.OfType<DataRow>().Select(row => Convert.ToDouble(row["Price (USD)"])))
-                    }
-                };
 
-            Labels = dtCurrency.Rows.OfType<DataRow>().Select(row => row["Name"].ToString()).ToArray();
-
-            YFormatter = value => value.ToString("C");
-            chart1.DataContext = this;
+            datagrid1.ItemsSource = dtCurrency.DefaultView;
         }
     }
 

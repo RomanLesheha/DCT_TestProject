@@ -109,7 +109,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Max supply:" Width="125"/>
-                    <TextBlock Text="{Binding maxsupply}" Width="180"/>
+                    <TextBlock Text="{Binding maxSupply}" Width="180"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
