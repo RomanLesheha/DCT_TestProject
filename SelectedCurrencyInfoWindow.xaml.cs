@@ -42,12 +42,8 @@ namespace DCT_TestProject
             await ParseSelectedCurrencyInterval(SelectedId);
             await ParseSelectedCurrencyMarkets(SelectedId,10);
             await ParseSelectedCurrency(SelectedId);
-
             chart2.Series = Chart2SeriesCollection;
             chart2.AxisX[0].Labels = Chart2Labels;
-
-            
-
         }
         private async Task ParseSelectedCurrency(string SelectedID)
         {
