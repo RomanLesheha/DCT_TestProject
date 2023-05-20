@@ -96,7 +96,7 @@ namespace DCT_TestProject
            
             Labels = dtCurrency.Rows.OfType<DataRow>().Select(row => row["MarketName"].ToString()).ToArray();
 
-            YFormatter = value => value.ToString("C");
+            YFormatter = value => value.ToString("N8");
 
             chartMarkets.DataContext = this;
         }
@@ -129,7 +129,7 @@ namespace DCT_TestProject
 
             Chart2Labels = time.Select(dt => dt.ToString()).ToArray();
 
-            YFormatter = value => value.ToString("C");
+            YFormatter = value => value.ToString("N8");
 
             chart2.DataContext = this;
 
@@ -149,5 +149,6 @@ namespace DCT_TestProject
             chartMarkets.Series = SeriesCollection;
             chartMarkets.AxisX[0].Labels = Labels;
         }
+
     }
 }

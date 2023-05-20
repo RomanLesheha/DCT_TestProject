@@ -10,14 +10,21 @@ namespace DCT_TestProject.Models
     {
         public string exchangeId { get; set; }
         public string rank { get; set; }
-        public string percentTotalVolume { get; set; }
+        public decimal? percentTotalVolume { get; set; }
         public string name { get; set; }
         public decimal? volumeUsd { get; set; }
         public string tradingPairs { get; set; }
         public string socket { get; set; }
         public string exchangeUrl { get; set; }
         public string updated { get; set; }
-
+        public DateTimeOffset dateTimeOffset { get; set; }
         public Exchanges [] data { get; set; }
+    }
+
+    class ExchangeResponse
+    {
+        public Exchanges data { get; set; }
+        public long timestamp { get; set; }
+
     }
 }
