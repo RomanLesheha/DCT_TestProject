@@ -15,4 +15,4 @@ The last window is the currency converter, you can go to it by clicking the butt
 In this window, we can convert currencies, cryptocurrencies and also cryptocurrencies to currencies.
 
 The project also includes three folders, namely with interfaces, classes, and images that I used.
-This is the library I used LiveCharts ,with her help I built graphs.
+Also I used  library LiveCharts ,with her help I built graphs.
