@@ -17,6 +17,6 @@ namespace DCT_TestProject.Models
 
         public decimal rateUsd { get; set; }
 
-        public Rates[] data;
+        public Rates[] data { get; set; }
     }
 }

@@ -1,20 +1,11 @@
-﻿using DCT_TestProject.Models;
+﻿using DCT_TestProject.Interfaces;
+using DCT_TestProject.Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace DCT_TestProject
 {
@@ -23,33 +14,22 @@ namespace DCT_TestProject
     /// </summary>
     public partial class Window1 : Window
     {
+        private readonly IApiParser _apiParser;
         public Window1()
         {
+            _apiParser = new CoinCapApiParser();
             InitializeComponent();
         }
         private async void ParseBothCurrencyRating()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            HttpRequestMessage request = new HttpRequestMessage();
-            HttpRequestMessage request1 = new HttpRequestMessage();
-
-            request = new HttpRequestMessage(HttpMethod.Get, "/v2/assets");
-            request1 = new HttpRequestMessage(HttpMethod.Get, "/v2/rates");
+            var data = await _apiParser.ParseAsync<Assets>("/v2/assets");
+            var data1 = await _apiParser.ParseAsync<Rates>("/v2/rates");
 
             DataTable dtCurrency = new DataTable();
             dtCurrency.Columns.Add("Text");
             dtCurrency.Columns.Add("Value");
             dtCurrency.Rows.Add("--SELECT--", 0);
 
-            var response = await client.SendAsync(request);
-            var response1 = await client.SendAsync(request1);
-            response.EnsureSuccessStatusCode();
-            response1.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            var json1 = await response1.Content.ReadAsStringAsync();
-
-            var data = JsonConvert.DeserializeObject<Assets>(json);
             foreach (var item in data.data)
             {
                 dtCurrency.Rows.Add(item.name, item.priceUsd);
@@ -59,7 +39,6 @@ namespace DCT_TestProject
             cmbFromCurrency.SelectedValuePath = "Value";
             cmbFromCurrency.SelectedIndex = 0;
 
-            var data1 = JsonConvert.DeserializeObject<Rates>(json1);
             DataTable dtCurrency1 = new DataTable();
             dtCurrency1.Columns.Add("Text");
             dtCurrency1.Columns.Add("Value");
@@ -73,30 +52,15 @@ namespace DCT_TestProject
             cmbToCurrency.SelectedValuePath = "Value";
             cmbToCurrency.SelectedIndex = 0;
         }
-        private async void ParseCurrencyRating(bool CryptoCurrency)
+        private void ParseCurrencyRating(bool CryptoCurrency , dynamic data)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            HttpRequestMessage request = new HttpRequestMessage();
-
-            if (CryptoCurrency)
-                request = new HttpRequestMessage(HttpMethod.Get, "/v2/assets");
-            else          
-                request = new HttpRequestMessage(HttpMethod.Get, "/v2/rates");
-           
             DataTable dtCurrency = new DataTable();
             dtCurrency.Columns.Add("Text");
             dtCurrency.Columns.Add("Value");
             dtCurrency.Rows.Add("--SELECT--", 0);
 
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
             if (CryptoCurrency)
             {
-                var data = JsonConvert.DeserializeObject<Assets>(json);
-
                 foreach (var item in data.data)
                 {
                     dtCurrency.Rows.Add(item.name, item.priceUsd);
@@ -104,14 +68,12 @@ namespace DCT_TestProject
             }
             else
             {
-                var data = JsonConvert.DeserializeObject<Rates>(json);
                 foreach (var item in data.data)
                 {
                     dtCurrency.Rows.Add(item.id, item.rateUsd);
                 }
             }
            
-
             cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
             cmbFromCurrency.DisplayMemberPath = "Text";
             cmbFromCurrency.SelectedValuePath = "Value";
@@ -122,6 +84,7 @@ namespace DCT_TestProject
             cmbToCurrency.SelectedValuePath = "Value";
             cmbToCurrency.SelectedIndex = 0;
         }
+        
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
             double ConvertedValue = (double.Parse(cmbFromCurrency.SelectedValue.ToString()) * double.Parse(CountTxt.Text)) / double.Parse(cmbToCurrency.SelectedValue.ToString());
@@ -134,18 +97,20 @@ namespace DCT_TestProject
 
         }
 
-        private void CryptoCurrChecked(object sender, RoutedEventArgs e)
+        private async void CryptoCurrChecked(object sender, RoutedEventArgs e)
         {
             cmbToCurrency.ItemsSource = null;
             cmbFromCurrency.ItemsSource = null;
-            ParseCurrencyRating(true);
+            var data = await _apiParser.ParseAsync<Assets>("/v2/assets");
+            ParseCurrencyRating(true ,data);
         }
 
-        private void CurrChecked(object sender, RoutedEventArgs e)
+        private async void CurrChecked(object sender, RoutedEventArgs e)
         {
             cmbToCurrency.ItemsSource = null;
             cmbFromCurrency.ItemsSource = null;
-            ParseCurrencyRating(false);
+            var data = await _apiParser.ParseAsync<Rates>("/v2/rates");
+            ParseCurrencyRating(false, data);
         }
 
         private void CryptoToCurrChecked(object sender, RoutedEventArgs e)

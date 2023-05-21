@@ -10,10 +10,9 @@
         Title="MainWindow" Height="650" Width="1200" WindowStartupLocation="CenterScreen">
     <Grid x:Name="ChartGrid" RenderTransformOrigin="0.551,0.499" Margin="10,0,0,15" MinHeight="600" MinWidth="1200">
         <Grid.RowDefinitions>
-            <RowDefinition Height="37*"/>
-            <RowDefinition Height="26*"/>
+            <RowDefinition Height="51*"/>
             <RowDefinition Height="64*"/>
-            <RowDefinition Height="26*"/>
+            <RowDefinition Height="38*"/>
             <RowDefinition Height="162*"/>
             <RowDefinition Height="56*"/>
             <RowDefinition Height="248*"/>
@@ -21,18 +20,23 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="332*"/>
-            <ColumnDefinition Width="365*"/>
-            <ColumnDefinition Width="452*"/>
+            <ColumnDefinition Width="401*"/>
+            <ColumnDefinition Width="416*"/>
             <ColumnDefinition Width="51*"/>
         </Grid.ColumnDefinitions>
         <Label Content="All Currency" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,18,6,17" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1"/>
-        <Button x:Name="Currency_Converter" Content="Currency Converter" HorizontalAlignment="Left" VerticalAlignment="Top" Height="30" Width="111" RenderTransformOrigin="0.5,0.5" Click="Button1_Click" Grid.Column="1" Margin="11,14,0,0" Grid.RowSpan="2">
-
+                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,2,6,0" Grid.Column="1"/>
+        <Button x:Name="Currency_Converter" Content="Currency Converter" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="15" Style="{StaticResource ButtonRound}" Height="34" Width="146" RenderTransformOrigin="0.5,0.5" Click="CurrencyConverterBTN_Click" Grid.Column="3" Margin="270,0,0,0">
+            <Button.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#9D97DD" Offset="0.0"/>
+                    <GradientStop Color="#B7CEF0" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Background>
         </Button>
-        <DataGrid x:Name="datagrid1" Grid.Row="4"  SelectedCellsChanged="datagrid1_SelectedCellsChanged"
+        <DataGrid x:Name="CurrencyDataGrid" Grid.Row="3"  SelectedCellsChanged="CurrencyDataGrid_SelectedCellsChanged"
           Background="#FFFFFF" Foreground="#FF9D97DD" FontSize="14" FontWeight="Bold"
-          AutoGenerateColumns="False" ColumnWidth="SizeToCells" GridLinesVisibility="Vertical" BorderBrush="#FF9D97DD" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,6,30,19" HorizontalGridLinesBrush="#FF9D97DD" VerticalGridLinesBrush="#FF9D97DD" Grid.Column="1" IsReadOnly="True" IsTextSearchCaseSensitive="True" Grid.RowSpan="3">
+          AutoGenerateColumns="False" ColumnWidth="SizeToCells" GridLinesVisibility="Vertical" BorderBrush="#FF9D97DD" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,6,30,10" HorizontalGridLinesBrush="#FF9D97DD" VerticalGridLinesBrush="#FF9D97DD" Grid.Column="1" IsReadOnly="True" IsTextSearchCaseSensitive="True" Grid.RowSpan="3">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Rank" Binding="{Binding Rank}" Width="50"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
@@ -44,11 +48,11 @@
 
         </DataGrid>
         <Label Content="To see all information about currency click on it in table" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-            FontSize="12" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,33,6,2" Grid.Row="2" Grid.Column="1"/>
+            FontSize="12" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,51,6,32" Grid.Column="1" Grid.RowSpan="2"/>
 
-        <TextBox x:Name="currencyFind" Grid.ColumnSpan="2" HorizontalAlignment="Left"  BorderBrush="#9D97DD"  Margin="2,0,0,0" Grid.Row="3" Foreground="#9D97DD" Text="Enter currency name..." TextWrapping="Wrap" VerticalAlignment="Center" Width="157" Height="18"/>
-        <Button Content="Find currency" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="176,0,0,0" Grid.Row="3" VerticalAlignment="Center" RenderTransformOrigin="0.48,0.302" Width="90" Click="Button_Click" Height="20"/>
-        <lvc:CartesianChart x:Name="chart1" Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="12,6,10,23" Grid.Row="4" RenderTransformOrigin="0.5,0.5" Grid.Column="2" Grid.ColumnSpan="2" DataClick="Chart1_Click">
+        <TextBox x:Name="currencyFind" Grid.ColumnSpan="2" HorizontalAlignment="Left"  BorderBrush="#9D97DD"  Margin="6,37,0,0" Grid.Row="1" Foreground="#9D97DD" Text="Enter currency name..." TextWrapping="Wrap" VerticalAlignment="Top" Width="157" Height="18"/>
+        <Button Content="Find currency" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="178,37,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.48,0.302" Width="90" Click="FindCurrencyBTN_Click" Height="20"/>
+        <lvc:CartesianChart x:Name="ExchangeVolumeChart" Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="12,6,10,23" Grid.Row="3" RenderTransformOrigin="0.5,0.5" Grid.Column="2" Grid.ColumnSpan="2" DataClick="ExchangeVolumeChart_Click">
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Volume (USD)" LabelFormatter="{Binding YFormatter}" Foreground="#9D97DD"/>
             </lvc:CartesianChart.AxisY>
@@ -57,7 +61,7 @@
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
 
-        <lvc:PieChart x:Name="chart2" Series="{Binding SeriesCollection2}" LegendLocation="Left" Margin="10,10,28,5" Grid.Row="6" RenderTransformOrigin="0.5,0.5" Grid.Column="2">
+        <lvc:PieChart x:Name="chart2" Series="{Binding SeriesCollection2}" LegendLocation="Left" Margin="10,10,82,5" Grid.Row="5" RenderTransformOrigin="0.5,0.5" Grid.Column="2">
 
             <lvc:PieChart.DataTooltip>
                 <lvc:DefaultTooltip SelectionMode="SharedYValues"/>
@@ -65,18 +69,18 @@
         </lvc:PieChart>
 
         <Label Content="All Exchanges" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-            FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,18,46,17" Grid.RowSpan="2" Grid.Row="1" Grid.Column="2"/>
-        <TextBox x:Name="ExchangeFind" HorizontalAlignment="Left"  BorderBrush="#9D97DD"  Margin="12,0,0,0" Grid.Row="3" Foreground="#9D97DD" Text="Enter exchange name..." TextWrapping="Wrap" VerticalAlignment="Center" Width="157" Height="18" Grid.Column="2"/>
-        <Button Content="Find exchange" HorizontalAlignment="Left" Margin="186,0,0,0" Grid.Row="3" VerticalAlignment="Center" RenderTransformOrigin="0.48,0.302" Width="90" Click="Button_Click" Height="20" Grid.Column="2"/>
-        <Label Content="Detail information" FontSize="24" Foreground="#9D97DD" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="33,162,130,0" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2"/>
-        <Grid x:Name="detailInfo" Grid.Column="3" Grid.Row="6" Margin="20,1,20,-23">
+            FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="0,0,46,0" Grid.Column="2"/>
+        <TextBox x:Name="ExchangeFind" HorizontalAlignment="Left"  BorderBrush="#9D97DD"  Margin="12,39,0,0" Grid.Row="1" Foreground="#9D97DD" Text="Enter exchange name..." TextWrapping="Wrap" VerticalAlignment="Top" Width="157" Height="18" Grid.Column="2"/>
+        <Button Content="Find exchange" HorizontalAlignment="Left" Margin="178,37,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.48,0.302" Width="90" Click="FindExchangeBTN_Click" Height="20" Grid.Column="2"/>
+        <Label Content="Detail information" FontSize="24" Foreground="#9D97DD" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="33,162,130,0" Grid.Column="3" Grid.Row="3" Grid.RowSpan="2"/>
+        <Grid x:Name="detailInfo" Grid.Column="3" Grid.Row="5" Margin="20,1,20,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="163"/>
                 <ColumnDefinition Width="218"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1" Margin="10,10,-10,41" Grid.ColumnSpan="2">
+            <StackPanel Grid.Column="1" Margin="10,10,-10,30" Grid.ColumnSpan="2">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Foreground" Value="#9D97DD"/>
@@ -121,12 +125,15 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Last updated:" Width="140"/>
-                    <TextBlock Text="{Binding updated}" Width="212"/>
+                    <TextBlock Text="{Binding dateTimeOffset}" Width="212"/>
                 </StackPanel>
             </StackPanel>
 
         </Grid>
-        <Label Content="Percentage of total volume" FontSize="24" Foreground="#9D97DD" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,157,10,0" Grid.Column="2" Grid.Row="4" Grid.RowSpan="2"/>
+        <Label Content="Percentage of total volume" FontSize="24" Foreground="#9D97DD" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,157,10,0" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"/>
+        <Label Content="To see all information about exchange click on it on chart" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
+            FontSize="12" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Margin="10,51,34,32" Grid.Column="2" Grid.RowSpan="2"/>
+        <Label Content="Volume (USD)" FontSize="24" Foreground="#9D97DD" FontWeight="Bold" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,57,10,3" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"/>
     </Grid>
 
 </Window>

@@ -19,6 +19,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Runtime.Serialization;
 using DCT_TestProject.Models;
+using DCT_TestProject.Interfaces;
 
 namespace DCT_TestProject
 {
@@ -33,90 +34,37 @@ namespace DCT_TestProject
         static public string[] Labels2 { get; set; }
         static public Func<double, string> YFormatter { get; set; }
 
+        private readonly IApiParser _apiParser;
+
         public MainWindow()
         {
             InitializeComponent();
+            _apiParser = new CoinCapApiParser();
             ParseTopCurrency();
             ParseExchanges();
             ParseExchangesPercentTotalVolume();
 
         }
-        private void Chart1_Click(object sender, ChartPoint chartPoint)
-        {
-            var index = (int)chartPoint.X;
-
-            var clickedName = Labels[index];
-            var clickedId = clickedName.Split('-')[0].Trim();
-            ParseSelectedExchange(clickedId);
-        }
-
+      
         private async void ParseTopCurrency()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            HttpRequestMessage request = new HttpRequestMessage();
-
-            request = new HttpRequestMessage(HttpMethod.Get, "/v2/assets");
-
-            DataTable dtCurrency = new DataTable();
-            dtCurrency.Columns.Add("Rank");
-            dtCurrency.Columns.Add("Id");
-            dtCurrency.Columns.Add("Name");
-            dtCurrency.Columns.Add("Price");
-
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-           
-            var data = JsonConvert.DeserializeObject<Assets>(json);
+            var data = await _apiParser.ParseAsync<Assets>("/v2/assets");
             var sortedData = data.data.OrderByDescending(item => item.priceUsd);
+
+            DataTable dtCurrency = CreateCurrencyDataTable();
+
             foreach (var item in sortedData)
             {
                 dtCurrency.Rows.Add(item.rank,item.id,item.name, item.priceUsd.ToString("N8"));
             }
 
-            datagrid1.ItemsSource = dtCurrency.DefaultView;
+            CurrencyDataGrid.ItemsSource = dtCurrency.DefaultView;
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            HttpRequestMessage request = new HttpRequestMessage();
-
-            request = new HttpRequestMessage(HttpMethod.Get, "/v2/assets");
-
-            DataTable dtCurrency = new DataTable();
-            dtCurrency.Columns.Add("Rank");
-            dtCurrency.Columns.Add("Id");
-            dtCurrency.Columns.Add("Name");
-            dtCurrency.Columns.Add("Price");
-
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-
-            var data = JsonConvert.DeserializeObject<Assets>(json);
-            var sortedData = data.data.Where(x=>x.name.Contains(currencyFind.Text));
-            foreach (var item in sortedData)
-            {
-                dtCurrency.Rows.Add(item.rank, item.id, item.name, item.priceUsd.ToString("N8"));
-            }
-            datagrid1.ItemsSource = dtCurrency.DefaultView;
-        }
         private async void ParseExchanges()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v2/exchanges");
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-            var data = JsonConvert.DeserializeObject<Exchanges>(json);
-            var sortedData = data.data.OrderByDescending(item => item.rank);
+            var exchanges = await _apiParser.ParseAsync<Exchanges>("/v2/exchanges");
+            var sortedData = exchanges.data.OrderByDescending(item => item.rank);
 
             SeriesCollection = new SeriesCollection
             {
@@ -137,37 +85,34 @@ namespace DCT_TestProject
 
             YFormatter = value => value.ToString("C");
 
-            chart1.DataContext = this;
+            ExchangeVolumeChart.DataContext = this;
         }
         private async void ParseSelectedExchange(string SelectedID)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            HttpRequestMessage request = new HttpRequestMessage();
-            request = new HttpRequestMessage(HttpMethod.Get, $"/v2/exchanges/{SelectedID}");
+            var data = await _apiParser.ParseAsync<ExchangeResponse>($"/v2/exchanges/{SelectedID}");
 
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-
-            var data = JsonConvert.DeserializeObject<ExchangeResponse>(json);
             data.data.dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(data.timestamp).DateTime;
 
             detailInfo.DataContext = data.data;
         }
+        private async void ParseSelectedCurrency(string SelectedID)
+        {
+            var data = await _apiParser.ParseAsync<Assets>("/v2/assets");
+            var sortedData = data.data.Where(x => x.name.Contains(SelectedID));
+
+            DataTable dtCurrency = CreateCurrencyDataTable();
+
+            foreach (var item in sortedData)
+            {
+                dtCurrency.Rows.Add(item.rank, item.id, item.name, item.priceUsd.ToString("N8"));
+            }
+            CurrencyDataGrid.ItemsSource = dtCurrency.DefaultView;
+        }
 
         private async void ParseExchangesPercentTotalVolume()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("http://api.coincap.io");
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v2/exchanges");
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-
-            var data = JsonConvert.DeserializeObject<Exchanges>(json);
-            var sortedData = data.data.OrderByDescending(item => item.percentTotalVolume);
+            var exchanges = await _apiParser.ParseAsync<Exchanges>("/v2/exchanges");
+            var sortedData = exchanges.data.OrderByDescending(item => item.percentTotalVolume);
 
             var top10Data = sortedData
                 .Where(item => item.percentTotalVolume != null)
@@ -185,13 +130,11 @@ namespace DCT_TestProject
             for (int i = 0; i < top10Data.Count; i++)
             {
                 var dataItem = top10Data[i];
-                var values = new ChartValues<decimal> { dataItem.percentTotalVolume.Value };
-                var color = GetRandomColor();
                 var pieSeries = new PieSeries
                 {
                     Title = dataItem.name,
-                    Values = values,
-                    Fill = new SolidColorBrush(color),
+                    Values = new ChartValues<decimal> { dataItem.percentTotalVolume.Value },
+                    Fill = new SolidColorBrush(GetRandomColor()),
                     Stroke = new SolidColorBrush(Colors.White)
                 };
                 SeriesCollection2.Add(pieSeries);
@@ -199,13 +142,11 @@ namespace DCT_TestProject
 
             // Add "Other" category
             decimal otherTotalVolume = otherData.Sum(item => item.percentTotalVolume.Value);
-            var otherValues = new ChartValues<decimal> { otherTotalVolume };
-            var otherColor = Brushes.LightGray.Color;
             var otherPieSeries = new PieSeries
             {
                 Title = "Other",
-                Values = otherValues,
-                Fill = new SolidColorBrush(otherColor),
+                Values = new ChartValues<decimal> { otherTotalVolume },
+                Fill = new SolidColorBrush(Brushes.LightGray.Color),
                 Stroke = new SolidColorBrush(Colors.White)
             };
             SeriesCollection2.Add(otherPieSeries);
@@ -216,16 +157,17 @@ namespace DCT_TestProject
 
             chart2.DataContext = this;
         }
-        private Color GetRandomColor()
+        private void ExchangeVolumeChart_Click(object sender, ChartPoint chartPoint)
         {
-            Random random = new Random();
-            byte[] bytes = new byte[3];
-            random.NextBytes(bytes);
-            return Color.FromRgb(bytes[0], bytes[1], bytes[2]);
+            var index = (int)chartPoint.X;
+
+            var clickedName = Labels[index];
+            var clickedId = clickedName.Split('-')[0].Trim();
+            ParseSelectedExchange(clickedId);
         }
-        private void datagrid1_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        private void CurrencyDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            if (datagrid1.SelectedItem is DataRowView selectedRow)
+            if (CurrencyDataGrid.SelectedItem is DataRowView selectedRow)
             {
                 string name = selectedRow["Id"].ToString();
 
@@ -236,12 +178,37 @@ namespace DCT_TestProject
 
             }
         }
-        private void Button1_Click(object sender, RoutedEventArgs e)
+        private void FindCurrencyBTN_Click(object sender, RoutedEventArgs e)
+        {
+            ParseSelectedCurrency(currencyFind.Text);
+        }
+
+        private void FindExchangeBTN_Click(object sender, RoutedEventArgs e)
+        {
+            ParseSelectedExchange(ExchangeFind.Text);
+        }
+
+        private void CurrencyConverterBTN_Click(object sender, RoutedEventArgs e)
         {
             Window1 window = new Window1();
             window.Show();
         }
-      
+        private Color GetRandomColor()
+        {
+            Random random = new Random();
+            byte[] bytes = new byte[3];
+            random.NextBytes(bytes);
+            return Color.FromRgb(bytes[0], bytes[1], bytes[2]);
+        }
+        private DataTable CreateCurrencyDataTable()
+        {
+            DataTable dtCurrency = new DataTable();
+            dtCurrency.Columns.Add("Rank");
+            dtCurrency.Columns.Add("Id");
+            dtCurrency.Columns.Add("Name");
+            dtCurrency.Columns.Add("Price");
+            return dtCurrency;
+        }
     }
 
 }
