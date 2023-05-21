@@ -94,6 +94,10 @@ namespace DCT_TestProject
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
+            resultlbl.Content = null;
+            CountTxt.Text = null;
+            cmbFromCurrency.SelectedIndex = 0;
+            cmbToCurrency.SelectedIndex = 0;
 
         }
 

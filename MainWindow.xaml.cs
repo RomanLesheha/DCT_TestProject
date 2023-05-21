@@ -12,14 +12,12 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System.Runtime.Serialization;
 using DCT_TestProject.Models;
 using DCT_TestProject.Interfaces;
+using System.Diagnostics;
 
 namespace DCT_TestProject
 {
@@ -64,17 +62,17 @@ namespace DCT_TestProject
         private async void ParseExchanges()
         {
             var exchanges = await _apiParser.ParseAsync<Exchanges>("/v2/exchanges");
-            var sortedData = exchanges.data.OrderByDescending(item => item.rank);
+            var sortedData = exchanges.data.OrderByDescending(item => item.volumeUsd).Take(15);
 
             SeriesCollection = new SeriesCollection
             {
-                new LineSeries
+                new ColumnSeries
                 {
                     Title = "Volume (USD)",
                     Values = new ChartValues<decimal>(sortedData
                         .Where(item => item.volumeUsd != null)
                         .Select(item => item.volumeUsd.Value)),
-                    Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9D97DD"))
+                    Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9D97DD"))
                 }
             };
 
@@ -90,8 +88,13 @@ namespace DCT_TestProject
         private async void ParseSelectedExchange(string SelectedID)
         {
             var data = await _apiParser.ParseAsync<ExchangeResponse>($"/v2/exchanges/{SelectedID}");
-
+            if (data==null)
+            {
+                MessageBox.Show ("We don`t find any information about this exhange");
+                return;
+            }
             data.data.dateTimeOffset = DateTimeOffset.FromUnixTimeMilliseconds(data.timestamp).DateTime;
+
 
             detailInfo.DataContext = data.data;
         }
@@ -208,6 +211,20 @@ namespace DCT_TestProject
             dtCurrency.Columns.Add("Name");
             dtCurrency.Columns.Add("Price");
             return dtCurrency;
+        }
+        private void Follow_the_link(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textBlock = (TextBlock)sender;
+            string url = textBlock.Text;
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
         }
     }
 

@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace DCT_TestProject
 {
@@ -26,6 +28,8 @@ namespace DCT_TestProject
 
         static public string SelectedId { get; set; }
 
+        public string SelectedInterval { get; set; }
+
         private readonly IApiParser _apiParser;
         public SelectedCurrencyInfoWindow()
         {
@@ -34,7 +38,7 @@ namespace DCT_TestProject
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await ParseSelectedCurrencyInterval(SelectedId);
+            await ParseSelectedCurrencyHistory(SelectedId);
             await ParseSelectedCurrencyMarkets(SelectedId,10);
             await ParseSelectedCurrency(SelectedId);
             chart2.Series = Chart2SeriesCollection;
@@ -59,7 +63,8 @@ namespace DCT_TestProject
                 new LineSeries
                 {
                     Title = "Price",
-                    Values = new ChartValues<decimal>(sortedData.Select(item => item.priceUsd))
+                    Values = new ChartValues<decimal>(sortedData.Select(item => item.priceUsd)),
+                    Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9D97DD"))
                 }
             };
 
@@ -68,11 +73,11 @@ namespace DCT_TestProject
 
             chartMarkets.DataContext = this;
         }
-        private async Task ParseSelectedCurrencyInterval(string currencyId)
+        private async Task ParseSelectedCurrencyHistory(string currencyId , string interval = "d1")
         {
-            var data = await _apiParser.ParseAsync<SelectedAsset>($"/v2/assets/{currencyId}/history?interval=d1");
+            var data = await _apiParser.ParseAsync<SelectedAsset>($"/v2/assets/{currencyId}/history?interval={interval}");
 
-            var priceUsd = data.data.Select(item => item.priceUsd).ToList();
+            var priceUsd = data.data.Select(item => item.priceUsd).Take(250).ToList();
             var time = data.data.Select(item => DateTimeOffset.FromUnixTimeMilliseconds(item.time).DateTime).ToList();
 
             Chart2SeriesCollection = new SeriesCollection
@@ -80,7 +85,8 @@ namespace DCT_TestProject
                 new LineSeries
                 {
                     Title = "Price (USD)",
-                    Values = new ChartValues<decimal>(priceUsd)
+                    Values = new ChartValues<decimal>(priceUsd),
+                    Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#9D97DD"))
                 }
             };
 
@@ -90,6 +96,16 @@ namespace DCT_TestProject
 
             chart2.DataContext = this;
 
+        }
+        private async void cmbInterval_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbInterval.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedTag = selectedItem.Tag.ToString();
+                await ParseSelectedCurrencyHistory(SelectedId , selectedTag);
+                chart2.Series = Chart2SeriesCollection;
+                chart2.AxisX[0].Labels = Chart2Labels;
+            }
         }
         private async void ShowMoreClick(object sender, RoutedEventArgs e)
         {

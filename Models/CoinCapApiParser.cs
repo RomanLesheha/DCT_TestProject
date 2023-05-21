@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DCT_TestProject.Models
 {
@@ -31,9 +32,8 @@ namespace DCT_TestProject.Models
             }
             catch (Exception ex)
             {
-                // Handle the exception here or throw a custom exception
-                Console.WriteLine($"An error occurred while parsing the data: {ex.Message}");
-                return default; // or throw an exception if appropriate for your use case
+                MessageBox.Show($"An error occurred while parsing the data: {ex.Message}", "Check your internet connection",MessageBoxButton.OK,MessageBoxImage.Error);
+                return default; 
             }
         }
     }

@@ -6,21 +6,21 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:DCT_TestProject"
         mc:Ignorable="d"
-        Title="SelectedCurrencyInfoWindow" Height="600" Width="900" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+        Title="SelectedCurrencyInfoWindow" Height="622" Width="900" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,0,4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="128*"/>
             <ColumnDefinition Width="97*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="36*"/>
-            <RowDefinition Height="215*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="241*"/>
-            <RowDefinition Height="17*"/>
+            <RowDefinition Height="63*"/>
+            <RowDefinition Height="184*"/>
+            <RowDefinition Height="56*"/>
+            <RowDefinition Height="278*"/>
+            <RowDefinition Height="21*"/>
         </Grid.RowDefinitions>
 
-        <lvc:CartesianChart x:Name="chart2" Series="{Binding SeriesCollection2}" LegendLocation="Right" Margin="10,41,0,34" Grid.ColumnSpan="2" Grid.Row="1" RenderTransformOrigin="0.5,0.5" >
+        <lvc:CartesianChart x:Name="chart2" Series="{Binding SeriesCollection2}" LegendLocation="Right" Margin="10,13,0,15" Grid.ColumnSpan="2" Grid.Row="1" RenderTransformOrigin="0.5,0.5" >
             <lvc:CartesianChart.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -37,7 +37,7 @@
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
 
-        <lvc:CartesianChart x:Name="chartMarkets" Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="22,43,23,30" Grid.Row="3" >
+        <lvc:CartesianChart x:Name="chartMarkets" Series="{Binding SeriesCollection}" LegendLocation="Right" Margin="22,10,23,30" Grid.Row="3" >
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Price" LabelFormatter="{Binding YFormatter}"/>
             </lvc:CartesianChart.AxisY>
@@ -46,22 +46,10 @@
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,-70,-80,155" Grid.RowSpan="2">
-            <Label Content="Currency History" Width="875" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"
-                FontSize="35" Foreground="#9D97DD" FontWeight="Bold" Height="56" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform AngleX="1.697" AngleY="0.016"/>
-                        <RotateTransform/>
-                        <TranslateTransform X="0.774" Y="0.13"/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-        </StackPanel>
-        <Label Content="Currency on markets"  Margin="22,215,0,215" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3"/>
-        <Button Content="Show More" HorizontalAlignment="Left" Margin="88,0,0,0" Grid.Row="3" VerticalAlignment="Bottom" Height="37" Width="96" Foreground="White" FontSize="12" Style="{StaticResource ButtonRound}" Click="ShowMoreClick" Grid.RowSpan="2" >
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="2" Margin="0,-70,-80,23"/>
+        <Label Content="Currency on markets"  Margin="26,8,218,5" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5"/>
+        <Button Content="Show More" HorizontalAlignment="Left" Margin="88,0,0,0" Grid.Row="3" VerticalAlignment="Bottom" Height="37" Width="96" Foreground="White" FontSize="12" Style="{StaticResource ButtonRound}" Click="ShowMoreClick" >
             <Button.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="#9D97DD" Offset="0.0"/>
@@ -69,7 +57,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button Content="Show Less" Click="ShowLessClick" HorizontalAlignment="Right" Margin="0,0,94,0" Grid.Row="3" VerticalAlignment="Bottom" Height="37" Width="96" Foreground="White" FontSize="12" Style="{StaticResource ButtonRound}" Grid.RowSpan="2" >
+        <Button Content="Show Less" Click="ShowLessClick" HorizontalAlignment="Right" Margin="0,0,94,0" Grid.Row="3" VerticalAlignment="Bottom" Height="37" Width="96" Foreground="White" FontSize="12" Style="{StaticResource ButtonRound}" >
             <Button.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Color="#9D97DD" Offset="0.0"/>
@@ -77,14 +65,14 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Grid x:Name="detailInfo" Grid.Column="1" Grid.Row="3" Margin="0,21,0,10" Grid.RowSpan="2">
+        <Grid x:Name="detailInfo" Grid.Column="1" Grid.Row="2" Margin="0,21,0,-16" Grid.RowSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="138.2"/>
                 <ColumnDefinition Width="186.8"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="1" Margin="0,10,0,28" Grid.ColumnSpan="2">
+            <StackPanel Grid.Column="1" Margin="0,28,0,125" Grid.ColumnSpan="2">
                 <StackPanel.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="Foreground" Value="#9D97DD"/>
@@ -129,8 +117,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="ChangePercent24Hr:" Width="125"/>
-                    <TextBlock Text="{Binding changePercent24Hr}" Width="180"/>
+                    <TextBlock Text="ChangePercent24Hr:" Width="139"/>
+                    <TextBlock Text="{Binding changePercent24Hr}" Width="186"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -143,7 +131,23 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <Label Content="Detail information"  Margin="5,211,109,215" Grid.Row="1" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
-                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3" Grid.Column="1"/>
+        <Label Content="Detail information"  Margin="0,2,114,8" Grid.Row="2" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                FontSize="25" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
+        <ComboBox x:Name="cmbInterval" HorizontalAlignment="Left" VerticalContentAlignment="Center" SelectedValue="{Binding SelectedInterval}" FontSize="15" BorderBrush="White" Foreground="#FF9D97DD" Background="#FFEEEEF9" Margin="212,0,0,0" VerticalAlignment="Center" Width="141" Height="26" SelectionChanged="cmbInterval_SelectionChanged" Grid.Column="1">
+            <ComboBoxItem Content="1 minute" Tag="m1" />
+            <ComboBoxItem Content="5 minute" Tag="m5" />
+            <ComboBoxItem Content="15 minute" Tag="m15" />
+            <ComboBoxItem Content="30 minute" Tag="m30" />
+            <ComboBoxItem Content="1 hour" Tag="h1" />
+            <ComboBoxItem Content="2 hours" Tag="h2" />
+            <ComboBoxItem Content="6 hours" Tag="h6" />
+            <ComboBoxItem Content="12 hours" Tag="h12" />
+            <ComboBoxItem Content="1 day" Tag="d1" />
+        </ComboBox>
+        <Label Content="Choose history interval:"  Margin="10,9,176,8" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+            FontSize="15" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
+        <Label Content="Currency history"  Margin="10,0,234,11" HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+            FontSize="29" Foreground="#9D97DD" FontWeight="Bold" RenderTransformOrigin="0.5,0.5"/>
+
     </Grid>
 </Window>
